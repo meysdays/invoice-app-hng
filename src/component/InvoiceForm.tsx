@@ -1,12 +1,11 @@
 import InputForm from "../component/input";
 import SelectForm from "../component/selectForm";
 import ItemList, { type ItemData } from "../component/ItemList";
-import { useState } from "react";
 
 type FormErrors = Partial<
   Record<keyof CreateInvoiceFormData, boolean>
 >;
-type ItemError = Partial<Record<keyof ItemData, boolean>>;
+// type ItemError = Partial<Record<keyof ItemData, boolean>>;
 
 
 interface InvoiceFormProps {
@@ -40,9 +39,9 @@ const options = [
 
 const InvoiceForm = ({ value, onChange, error }: InvoiceFormProps) => {
 
-    const [itemErrors, setItemErrors] = useState<ItemError[]>(
-        value.items.map(() => ({})),
-      );
+    // const [itemErrors, setItemErrors] = useState<ItemError[]>(
+    //     value.items.map(() => ({})),
+    //   );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -59,21 +58,21 @@ const InvoiceForm = ({ value, onChange, error }: InvoiceFormProps) => {
     // }));
   };
 
-  const clearItemError = (
-  index: number,
-  field: keyof ItemData
-) => {
-  setItemErrors((prev) => {
-    const updated = [...prev];
+//   const clearItemError = (
+//   index: number,
+//   field: keyof ItemData
+// ) => {
+//   setItemErrors((prev) => {
+//     const updated = [...prev];
 
-    updated[index] = {
-      ...updated[index],
-      [field]: false,
-    };
+//     updated[index] = {
+//       ...updated[index],
+//       [field]: false,
+//     };
 
-    return updated;
-  });
-};
+//     return updated;
+//   });
+// };
 
   const handleItemChange = (index: number, item: ItemData) => {
     const items = [...value.items];
@@ -197,7 +196,7 @@ const InvoiceForm = ({ value, onChange, error }: InvoiceFormProps) => {
           error={error.projectDescription}
         />
       </div>
-      <ItemList items={value.items} onChange={handleItemChange} errors={itemErrors} />
+      <ItemList items={value.items} onChange={handleItemChange}  />
     </div>
   );
 };

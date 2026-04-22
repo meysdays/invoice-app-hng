@@ -29,7 +29,7 @@ const CreateInvoicePage = ({ onBack }: CreateInvoicePageProps) => {
   const [errors, setErrors] = useState<FormErrors>({});
 
   const [formData, setFormData] = useState<CreateInvoiceFormData>(defaultForm);
-  const { addInvoice, invoices } = useInvoice();
+  const { addInvoice } = useInvoice();
 
   const handleFormChange = (data: CreateInvoiceFormData) => {
     setFormData(data);

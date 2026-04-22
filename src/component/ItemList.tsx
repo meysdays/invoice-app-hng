@@ -14,10 +14,10 @@ type ItemError = Partial<Record<keyof ItemData, boolean>>;
 interface ItemListProps {
   items: ItemData[];
   onChange: (index: number, item: ItemData) => void;
-  errors: ItemError[];
+  errors?: ItemError[];
 }
 
-const ItemList = ({ items, onChange, errors }: ItemListProps) => {
+const ItemList = ({ items, onChange }: ItemListProps) => {
   const handleItemChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement>,
@@ -43,7 +43,6 @@ const ItemList = ({ items, onChange, errors }: ItemListProps) => {
               name="itemName"
               value={item.itemName}
               onChange={(e) => handleItemChange(idx, e)}
-                error={errors[idx]?.itemName}
             />
           </div>
           <div key={idx} className="flex w-full gap-3 mt-4.5">

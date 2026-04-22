@@ -1,14 +1,14 @@
-import { EmailIcon, TrashIcon } from "../assets/icons";
+import { EmailIcon } from "../assets/icons";
 import { useInvoice } from "../context/invoice-context";
 import CreateInvoicePage from "./create-invoice";
 
 interface HomePageProps {
-  onDetails: (id: number) => void;
+  onDetails?: (id: number) => void;
   modal: boolean;
   handleModal: () => void;
 }
 
-const HomePage = ({ onDetails, modal, handleModal }: HomePageProps) => {
+const HomePage = ({  modal, handleModal }: HomePageProps) => {
   const { invoices } = useInvoice();
 
   console.log("All invoices", invoices);
