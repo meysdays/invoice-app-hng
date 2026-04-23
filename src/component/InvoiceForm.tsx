@@ -2,11 +2,8 @@ import InputForm from "../component/input";
 import SelectForm from "../component/selectForm";
 import ItemList, { type ItemData } from "../component/ItemList";
 
-type FormErrors = Partial<
-  Record<keyof CreateInvoiceFormData, boolean>
->;
+type FormErrors = Partial<Record<keyof CreateInvoiceFormData, boolean>>;
 // type ItemError = Partial<Record<keyof ItemData, boolean>>;
-
 
 interface InvoiceFormProps {
   value: CreateInvoiceFormData;
@@ -14,7 +11,10 @@ interface InvoiceFormProps {
   error: FormErrors;
 }
 
+// type status = "draft" | "pending" | "paid";
+
 export interface CreateInvoiceFormData {
+  id: number | null;
   streetAddress: string;
   city: string;
   postalCode: string;
@@ -23,12 +23,15 @@ export interface CreateInvoiceFormData {
   clientName: string;
   clientEmail: string;
   clientStreetAddress: string;
+  clientCity: string;
+  clientPostalCode: string;
+  clientCountry: string;
   invoiceDate: string;
   projectDescription: string;
   items: ItemData[];
+  status: "draft" | "pending" | "paid" | null;
+  grandTotal: number;
 }
-
-
 
 const options = [
   { label: "Lagos", value: "lagos" },
@@ -38,10 +41,9 @@ const options = [
 ];
 
 const InvoiceForm = ({ value, onChange, error }: InvoiceFormProps) => {
-
-    // const [itemErrors, setItemErrors] = useState<ItemError[]>(
-    //     value.items.map(() => ({})),
-    //   );
+  // const [itemErrors, setItemErrors] = useState<ItemError[]>(
+  //     value.items.map(() => ({})),
+  //   );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -51,28 +53,7 @@ const InvoiceForm = ({ value, onChange, error }: InvoiceFormProps) => {
       ...value,
       [name]: val,
     });
-
-    // setErrors((prev) => ({
-    //   ...prev,
-    //   [name]: false,
-    // }));
   };
-
-//   const clearItemError = (
-//   index: number,
-//   field: keyof ItemData
-// ) => {
-//   setItemErrors((prev) => {
-//     const updated = [...prev];
-
-//     updated[index] = {
-//       ...updated[index],
-//       [field]: false,
-//     };
-
-//     return updated;
-//   });
-// };
 
   const handleItemChange = (index: number, item: ItemData) => {
     const items = [...value.items];
@@ -91,29 +72,37 @@ const InvoiceForm = ({ value, onChange, error }: InvoiceFormProps) => {
           onChange={handleChange}
           error={error.streetAddress}
         />
-        <div className="flex flex-row justify-between my-4.5">
-          <InputForm
-            label="City"
-            name="city"
-            value={value.city}
-            onChange={handleChange}
-            error={error.city}
-          />
-          <InputForm
-            label="Post Code"
-            name="postalCode"
-            value={value.postalCode}
-            onChange={handleChange}
-            error={error.postalCode}
-          />
+        <div className="flex flex-wrap gap-4 my-4.5">
+          <div className="w-[48%] md:flex-1">
+            <InputForm
+              label="City"
+              name="city"
+              value={value.city}
+              onChange={handleChange}
+              error={error.city}
+            />
+          </div>
+
+          <div className="w-[48%] md:flex-1">
+            <InputForm
+              label="Post Code"
+              name="postalCode"
+              value={value.postalCode}
+              onChange={handleChange}
+              error={error.postalCode}
+            />
+          </div>
+
+          <div className="flex-1 md:w-[48%]">
+            <InputForm
+              label="Country"
+              name="country"
+              value={value.country}
+              onChange={handleChange}
+              error={error.country}
+            />
+          </div>
         </div>
-        <InputForm
-          label="Country"
-          name="country"
-          value={value.country}
-          onChange={handleChange}
-          error={error.country}
-        />
       </div>
       <div className="my-5.5">
         <p className="font-medium text-primary mb-5.5">Bill To</p>
@@ -141,53 +130,61 @@ const InvoiceForm = ({ value, onChange, error }: InvoiceFormProps) => {
             error={error.clientStreetAddress}
           />
         </div>
-        <div className="flex flex-row justify-between my-4.5">
-          <InputForm
-            label="City"
-            name="city"
-            value={value.city}
-            onChange={handleChange}
-            error={error.city}
-          />
-          <InputForm
-            label="Post Code"
-            name="postalCode"
-            value={value.postalCode}
-            onChange={handleChange}
-            error={error.postalCode}
-          />
+        <div className="flex flex-wrap gap-4 my-4.5">
+          <div className="w-[48%] md:flex-1">
+            <InputForm
+              label="City"
+              name="clientCity"
+              value={value.clientCity}
+              onChange={handleChange}
+              error={error.clientCity}
+            />
+          </div>
+
+          <div className="w-[48%] md:flex-1">
+            <InputForm
+              label="Post Code"
+              name="clientPostalCode"
+              value={value.clientPostalCode}
+              onChange={handleChange}
+              error={error.clientPostalCode}
+            />
+          </div>
+          <div className="flex-1 md:w-[48%]">
+            <InputForm
+              label="Country"
+              name="clientCountry"
+              value={value.clientCountry}
+              onChange={handleChange}
+              error={error.clientCountry}
+            />
+          </div>
         </div>
-        <InputForm
-          label="Country"
-          name="country"
-          value={value.country}
-          onChange={handleChange}
-          error={error.country}
-        />
       </div>
       <div className="flex flex-col gap-4">
-        <InputForm
-          label="Invoice Date"
-          name="invoiceDate"
-          type="date"
-          value={value.invoiceDate}
-          onChange={handleChange}
-          error={error.invoiceDate}
-        />
-        <InputForm
-          label="Country"
-          name="country"
-          value={value.country}
-          onChange={handleChange}
-          error={error.country}
-        />
-        <SelectForm
-          label="Payment Terms"
-          name="paymentTerms"
-          value={value.paymentTerms}
-          options={options}
-          onChange={handleChange}
-        />
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-3">
+          <div className="w-full md:w-1/2">
+            <InputForm
+              label="Invoice Date"
+              name="invoiceDate"
+              type="date"
+              value={value.invoiceDate}
+              onChange={handleChange}
+              error={error.invoiceDate}
+            />
+          </div>
+
+          <div className="w-full md:w-1/2">
+            <SelectForm
+              label="Payment Terms"
+              name="paymentTerms"
+              value={value.paymentTerms}
+              options={options}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
         <InputForm
           label="Project Description"
           name="projectDescription"
@@ -196,7 +193,7 @@ const InvoiceForm = ({ value, onChange, error }: InvoiceFormProps) => {
           error={error.projectDescription}
         />
       </div>
-      <ItemList items={value.items} onChange={handleItemChange}  />
+      <ItemList items={value.items} onChange={handleItemChange} />
     </div>
   );
 };

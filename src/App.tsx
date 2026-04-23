@@ -39,17 +39,19 @@ const App = () => {
   };
 
   return (
-    <Mainlayout>
-      {navigation.page === "home" && <FilterSection onCreate={handleModal} />}
-      <MainPage
-        onDetails={goToDetails}
-        onCreate={goToCreate}
-        goBack={goBack}
-        navigation={navigation}
-        modal={isOpen}
-        handleModal={handleModal}
-      />
-    </Mainlayout>
+    <div className="bg-dark-tertiary ">
+      <Mainlayout>
+        {navigation.page === "home" && <FilterSection onCreate={handleModal} />}
+        <MainPage
+          onDetails={goToDetails}
+          onCreate={goToCreate}
+          goBack={goBack}
+          navigation={navigation}
+          modal={isOpen}
+          handleModal={handleModal}
+        />
+      </Mainlayout>
+    </div>
   );
 };
 

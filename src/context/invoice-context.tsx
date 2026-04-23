@@ -16,13 +16,12 @@ const InvoiceProvider = ({ children }: { children: React.ReactNode }) => {
   const [invoices, setInvoices] = useState<CreateInvoiceFormData[]>([]);
 
   useEffect(() => {
-    const loadInvoices =  () => {
+    const loadInvoices = () => {
       try {
         const stored = window.localStorage.getItem(LOCAL_STORAGE_KEY);
         if (stored) {
           setInvoices(JSON.parse(stored));
           console.log(stored);
-          
         }
       } catch (error) {
         console.error("Failed to load invoices", error);
@@ -34,31 +33,37 @@ const InvoiceProvider = ({ children }: { children: React.ReactNode }) => {
   // useEffect(() => {
   //   window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(invoices));
   //   console.log("here");
-    
+
   // }, [invoices]);
 
-   const persistInvoices =  (invoices: CreateInvoiceFormData[]) => {
+  const persistInvoices = (invoices: CreateInvoiceFormData[]) => {
     try {
-       window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(invoices));
+      window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(invoices));
     } catch (e) {
       console.error("Failed to save invoices", e);
     }
   };
 
-  const addInvoice = (invoice: CreateInvoiceFormData) => {
-    const invoiceAdded = {...invoice};
+  const addInvoice = (invoice: Omit<CreateInvoiceFormData, "id">) => {
+    const id = Date.now();
+    const invoiceAdded = { ...invoice, id };
     const updatedInvoice = [...invoices, invoiceAdded];
     setInvoices(updatedInvoice);
     persistInvoices(updatedInvoice);
   };
 
   const updateInvoice = (id: number, invoice: CreateInvoiceFormData) => {
-    setInvoices((prev) => prev.map((inv, i) => (i === id ? invoice : inv)));
-    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(invoices));
+    const updatedInvoices = invoices.map((inv) =>
+      inv.id === id ? invoice : inv,
+    );
+    setInvoices(updatedInvoices);
+    persistInvoices(updatedInvoices);
   };
 
   const removeInvoice = (id: number) => {
-    setInvoices((prev) => prev.filter((_, i) => i !== id));
+    const updatedInvoices = invoices.filter((inv) => inv.id !== id);
+    setInvoices(updatedInvoices);
+    persistInvoices(updatedInvoices);
   };
 
   return (

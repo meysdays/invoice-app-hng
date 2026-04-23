@@ -4,7 +4,7 @@ import avatar from "../assets/images/avatar.png";
 
 const Header = () => {
   return (
-    <header className="bg-[#373B53] flex flex-row justify-between items-center h-17 w-full ">
+    <header className="bg-[#373B53] flex lg:hidden flex-row justify-between items-center h-17 fixed top-0 left-0 w-full z-50 ">
         <div className="bg-primary h-full w-17 rounded-tr-2xl rounded-br-2xl items-center justify-center flex">
           <LogoIcon />
         </div>

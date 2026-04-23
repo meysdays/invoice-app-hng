@@ -1,5 +1,5 @@
 import type { NavigationState } from "../App";
-import CreateInvoicePage from "./create-invoice";
+import InvoiceDetails from "./details-invoice";
 import HomePage from "./home";
 
 interface MainPageProps {
@@ -13,9 +13,9 @@ interface MainPageProps {
 
 const MainPage = ({ onDetails, goBack, navigation, modal, handleModal }: MainPageProps) => {
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col ">
       {navigation.page === "home" && <HomePage modal={modal} onDetails={onDetails} handleModal={handleModal} />}
-      {navigation.page === "create" && <CreateInvoicePage onBack={goBack} />}
+      {navigation.page === "details" && <InvoiceDetails modal={modal} handleModal={handleModal} onBack={goBack} id={navigation.id} />}
     </div>
   );
 };

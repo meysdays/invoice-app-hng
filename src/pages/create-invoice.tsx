@@ -7,9 +7,12 @@ import InvoiceForm, {
 
 interface CreateInvoicePageProps {
   onBack: () => void;
+  editField?: CreateInvoiceFormData | null;
+  title: string;
 }
 
 const defaultForm: CreateInvoiceFormData = {
+  id: null,
   streetAddress: "",
   city: "",
   postalCode: "",
@@ -21,15 +24,26 @@ const defaultForm: CreateInvoiceFormData = {
   invoiceDate: "",
   projectDescription: "",
   items: [{ itemName: "", qty: "", price: "", total: "" }],
+  clientCity: "",
+  clientPostalCode: "",
+  clientCountry: "",
+  status: null,
+  grandTotal: 0,
 };
 
 type FormErrors = Partial<Record<keyof CreateInvoiceFormData, boolean>>;
 
-const CreateInvoicePage = ({ onBack }: CreateInvoicePageProps) => {
+const CreateInvoicePage = ({
+  onBack,
+  editField,
+  title,
+}: CreateInvoicePageProps) => {
   const [errors, setErrors] = useState<FormErrors>({});
 
-  const [formData, setFormData] = useState<CreateInvoiceFormData>(defaultForm);
-  const { addInvoice } = useInvoice();
+  const [formData, setFormData] = useState<CreateInvoiceFormData>(
+    editField || defaultForm,
+  );
+  const { addInvoice, updateInvoice } = useInvoice();
 
   const handleFormChange = (data: CreateInvoiceFormData) => {
     setFormData(data);
@@ -42,11 +56,17 @@ const CreateInvoicePage = ({ onBack }: CreateInvoicePageProps) => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Helper to validate and add invoice with status
 
+  const getGrandTotal = () => {
+    return formData.items.reduce((sum, item) => {
+      const total = parseFloat(item.total);
+      return sum + (isNaN(total) ? 0 : total);
+    }, 0);
+  };
+
+  const validateAndAddInvoice = (status: "pending" | "draft") => {
     const newErrors: FormErrors = {};
-
     Object.entries(formData).forEach(([key, value]) => {
       if (key === "items") return;
       if (typeof value === "string" && !value.trim()) {
@@ -54,53 +74,100 @@ const CreateInvoicePage = ({ onBack }: CreateInvoicePageProps) => {
       }
     });
     setErrors(newErrors);
-
     if (Object.keys(newErrors).length > 0) return;
+    const grandTotal = getGrandTotal();
+    const invoiceWithStatus = { ...formData, status, grandTotal };
 
-    addInvoice(formData);
-    // Optionally reset form or show success message here
-    console.log("Invoice Data:", formData);    
+    if (!editField) {
+      addInvoice(invoiceWithStatus);
+      // Optionally reset form or show success message here
+      console.log("Invoice Data:", invoiceWithStatus);
+    }else{
+      updateInvoice(editField.id as number, invoiceWithStatus);
+      console.log("Updated Invoice Data:", invoiceWithStatus);
+    }
   };
 
-  const handleSaveDraft = () => {
-    // Save as draft logic here
-    console.log("Draft Data:", formData);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    validateAndAddInvoice("pending");
+    onBack();
+  };
+
+  const handleDiscard = () => {
+    if (editField) {
+      onBack();
+    } else {
+      setFormData(defaultForm);
+      onBack();
+    }
+  }
+
+  // Save as draft skips validation
+  const handleSaveDraft = (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    type status = "draft" | "pending" | "paid";
+    const grandTotal = getGrandTotal();
+    const invoiceWithStatus = {
+      ...formData,
+      status: "draft" as status,
+      grandTotal,
+    };
+    addInvoice(invoiceWithStatus);
+    // Optionally reset form or show success message here
+    console.log("Draft Data:", invoiceWithStatus);
   };
 
   return (
     <div className="flex-1 flex flex-col mx-6 overflow-scroll overflow-x-hidden">
       <button
         onClick={onBack}
-        className="flex flex-row  items-center  gap-6 mt-8"
+        className="flex flex-row  items-center  gap-6 mt-8 cursor-pointer"
       >
         <BackIcon />
-        <p className="font-bold text-center">Go back</p>
+        <p className="font-bold text-center hover:text-secondary-hover">
+          Go back
+        </p>
       </button>
 
-      <h3 className="mt-6.5 font-bold text-2xl">New Invoice</h3>
+      <h3 className="mt-6.5 font-bold text-2xl">{title}</h3>
 
       <form onSubmit={handleSubmit}>
-        <InvoiceForm error={errors} value={formData} onChange={handleFormChange} />
-        <div className="flex gap-4 mt-6">
+        <InvoiceForm
+          error={errors}
+          value={formData}
+          onChange={handleFormChange}
+        />
+
+        <button
+          type="button"
+          className="w-full px-4 py-2 bg-secondary text-white rounded"
+          onClick={handleAddItem}
+        >
+          Add New Item
+        </button>
+
+        <div className="flex justify-center gap-6 my-6 font-medium text-md  p-4 mb-0 bg-white shadow-2xl">
           <button
             type="button"
-            className="px-4 py-2 bg-secondary text-white rounded"
-            onClick={handleAddItem}
+            className="px-5.5 py-3.5 rounded-4xl hover:bg-secondary cursor-pointer text-secondary-hover "
+            onClick={handleDiscard}
           >
-            Add New Item
+            {editField ? "Cancel" : "Discard"}
           </button>
           <button
             type="button"
-            className="px-4 py-2 bg-gray-400 text-white rounded"
+            className={`px-5.5 py-3.5 rounded-4xl bg-gray-400 cursor-pointer text-white ${editField ? "hidden" : ""}`}
             onClick={handleSaveDraft}
           >
             Save as Draft
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-primary text-white rounded"
+            className="px-5.5 py-3.5  rounded-4xl bg-primary cursor-pointer text-white"
           >
-            Save Invoice
+            {editField ? "Save Changes" : "Save and Send"}
           </button>
         </div>
       </form>

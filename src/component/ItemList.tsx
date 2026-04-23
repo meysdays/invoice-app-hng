@@ -33,7 +33,7 @@ const ItemList = ({ items, onChange }: ItemListProps) => {
   };
 
   return (
-    <div className="my-12">
+    <div className="my-8">
       <h4 className="text-secondary-hover font-bold mb-6">Item List</h4>
       {items.map((item, idx) => (
         <div key={item.itemName}>
