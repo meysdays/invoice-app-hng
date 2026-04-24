@@ -1,18 +1,20 @@
 import { LogoIcon, MoonIcon } from '../assets/icons'
 import avatar from "../assets/images/avatar.png";
+import { useTheme } from '../context/themecontext';
 
 
 const Header = () => {
+  const { toggleTheme} = useTheme()
   return (
     <header className="bg-[#373B53] flex lg:hidden flex-row justify-between items-center h-17 fixed top-0 left-0 w-full z-50 ">
-        <div className="bg-primary h-full w-17 rounded-tr-2xl rounded-br-2xl items-center justify-center flex">
+        <div className="bg-primary h-full w-17 rounded-tr-2xl rounded-br-2xl items-center justify-center flex" >
           <LogoIcon />
         </div>
 
         <div className=" flex flex-row items-center">
-          <div className="py-5 px-6 ">
+          <button className="py-5 px-6 cursor-pointer" onClick={toggleTheme}>
             <MoonIcon />
-          </div>
+          </button>
 
           <span className=" w-0.5 h-17 bg-[#494E6E]" />
 

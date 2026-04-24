@@ -39,7 +39,7 @@ const App = () => {
   };
 
   return (
-    <div className="bg-dark-tertiary ">
+    <div className="bg-dark-tertiary dark:bg-dark-tertiary-hover]">
       <Mainlayout>
         {navigation.page === "home" && <FilterSection onCreate={handleModal} />}
         <MainPage

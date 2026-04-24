@@ -148,26 +148,26 @@ const CreateInvoicePage = ({
           Add New Item
         </button>
 
-        <div className="flex justify-center gap-6 my-6 font-medium text-md  p-4 mb-0 bg-white shadow-2xl">
+        <div className="flex justify-end gap-3 my-6 font-medium text-sm md:text-md py-4  shadow-2xl">
           <button
             type="button"
-            className="px-5.5 py-3.5 rounded-4xl hover:bg-secondary cursor-pointer text-secondary-hover "
+            className="px-5.5 py-3.5 rounded-4xl hover:bg-secondary cursor-pointer text-secondary-hover w-1/4 lg:w-1/8"
             onClick={handleDiscard}
           >
             {editField ? "Cancel" : "Discard"}
           </button>
           <button
             type="button"
-            className={`px-5.5 py-3.5 rounded-4xl bg-gray-400 cursor-pointer text-white ${editField ? "hidden" : ""}`}
+            className={`rounded-4xl bg-gray-400 cursor-pointer text-white w-1/2  md:w-1/4 lg:w-1/6 ${editField ? "hidden" : ""}`}
             onClick={handleSaveDraft}
           >
             Save as Draft
           </button>
           <button
             type="submit"
-            className="px-5.5 py-3.5  rounded-4xl bg-primary cursor-pointer text-white"
+            className="rounded-4xl bg-primary cursor-pointer text-white w-1/2 md:w-1/4 lg:w-1/6"
           >
-            {editField ? "Save Changes" : "Save and Send"}
+            {editField ? "Save Changes" : "Save & Send"}
           </button>
         </div>
       </form>

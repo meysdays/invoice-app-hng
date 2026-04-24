@@ -215,7 +215,8 @@ const InvoiceDetails = ({
           </button>
           <button
             type="submit"
-            className="px-5.5 py-3.5  rounded-4xl bg-primary cursor-pointer text-white"
+            disabled={viewData.status === "paid" || viewData.status === "draft"}
+            className="px-5.5 py-3.5  rounded-4xl bg-primary cursor-pointer text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
             onClick={() => handleStatus("paid")}
           >
             Mark as Paid

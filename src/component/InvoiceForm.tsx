@@ -41,9 +41,6 @@ const options = [
 ];
 
 const InvoiceForm = ({ value, onChange, error }: InvoiceFormProps) => {
-  // const [itemErrors, setItemErrors] = useState<ItemError[]>(
-  //     value.items.map(() => ({})),
-  //   );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -72,7 +69,7 @@ const InvoiceForm = ({ value, onChange, error }: InvoiceFormProps) => {
           onChange={handleChange}
           error={error.streetAddress}
         />
-        <div className="flex flex-wrap gap-4 my-4.5">
+        <div className="flex flex-wrap gap-2 my-4.5">
           <div className="w-[48%] md:flex-1">
             <InputForm
               label="City"
@@ -130,7 +127,7 @@ const InvoiceForm = ({ value, onChange, error }: InvoiceFormProps) => {
             error={error.clientStreetAddress}
           />
         </div>
-        <div className="flex flex-wrap gap-4 my-4.5">
+        <div className="flex flex-wrap gap-2 my-4.5">
           <div className="w-[48%] md:flex-1">
             <InputForm
               label="City"
