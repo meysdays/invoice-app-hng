@@ -79,7 +79,6 @@ const ItemList = ({ items, onChange }: ItemListProps) => {
           </div>
         </div>
       ))}
-      {/* Add New Item button removed; now handled by parent */}
     </div>
   );
 };

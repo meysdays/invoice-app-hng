@@ -34,14 +34,13 @@ export interface CreateInvoiceFormData {
 }
 
 const options = [
-  { label: "Lagos", value: "lagos" },
-  { label: "Abuja", value: "abuja" },
-  { label: "Port Harcourt", value: "ph" },
-  { label: "Enugu", value: "enugu" },
+  { label: "Net 1 Day", value: "Net 1 Day" },
+  { label: "Net 7 Days", value: "Net 7 Days" },
+  { label: "Net 14 Days", value: "Net 14 Days" },
+  { label: "Net 30 Days", value: "Net 30 Days" },
 ];
 
 const InvoiceForm = ({ value, onChange, error }: InvoiceFormProps) => {
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {

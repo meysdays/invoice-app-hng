@@ -56,8 +56,6 @@ const CreateInvoicePage = ({
     }));
   };
 
-  // Helper to validate and add invoice with status
-
   const getGrandTotal = () => {
     return formData.items.reduce((sum, item) => {
       const total = parseFloat(item.total);
@@ -80,7 +78,6 @@ const CreateInvoicePage = ({
 
     if (!editField) {
       addInvoice(invoiceWithStatus);
-      // Optionally reset form or show success message here
       console.log("Invoice Data:", invoiceWithStatus);
     }else{
       updateInvoice(editField.id as number, invoiceWithStatus);
@@ -103,7 +100,6 @@ const CreateInvoicePage = ({
     }
   }
 
-  // Save as draft skips validation
   const handleSaveDraft = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -115,7 +111,6 @@ const CreateInvoicePage = ({
       grandTotal,
     };
     addInvoice(invoiceWithStatus);
-    // Optionally reset form or show success message here
     console.log("Draft Data:", invoiceWithStatus);
   };
 
