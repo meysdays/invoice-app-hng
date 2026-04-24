@@ -31,7 +31,6 @@ const InvoiceDetails = ({
     updateInvoice(viewData.id as number, updatedInvoice);
   };
 
-  // Prevent background scroll when modal is open
   useEffect(() => {
     if (modal) {
       document.body.classList.add("overflow-hidden");
@@ -106,7 +105,8 @@ const InvoiceDetails = ({
               </button>
               <button
                 type="submit"
-                className="px-5.5 py-3.5  rounded-4xl bg-primary cursor-pointer text-white"
+                disabled={viewData.status === "paid" || viewData.status === "draft"}
+                className="px-5.5 py-3.5  rounded-4xl bg-primary cursor-pointer text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
                 onClick={() => handleStatus("paid")}
               >
                 Mark as Paid
@@ -145,7 +145,7 @@ const InvoiceDetails = ({
                   <p className="font-medium text-secondary-hover mb-2.5">
                     Payment Due
                   </p>
-                  <p className="font-bold">{viewData.invoiceDate}</p>
+                  <p className="font-bold">{viewData.paymentTerms}</p>
                 </div>
               </div>
 
